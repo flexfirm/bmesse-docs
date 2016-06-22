@@ -1,7 +1,5 @@
 # Bメッセ - サーバライブラリ[ruby]
 
-## What is Bメッセ - サーバライブラリ?
-
 「Bメッセ - サーバライブラリ」はチャットライブラリ「Bメッセ」を利用する際に、サーバサイドに必要な機能を提供する Ruby gem 形式で提供するライブラリです。
 
 ## Installation
@@ -19,7 +17,7 @@
 
 ### 認証トークンの発行
 
-アプリケーションにログインしているユーザのIDを指定して #generate_auth_token() を呼出し認証トークンを発行します。  
+既存のアプリケーション認証処理の一環として組込みます。ログインしたユーザのIDを指定して #generate_auth_token() を呼出し認証トークンを発行します。  
 戻り値の token をクライアントへ返却し、以降の Bmesse の処理で使用します。
 
 ```ruby
@@ -30,7 +28,7 @@ module Api
 
   class InitializeController < ApplicationController
     def index
-      user_id = 'abc123456789'  # 実際にはログインしているユーザのID
+      user_id = 'abc123456789'  # 実際にはログインしたユーザのID
       
       begin
         token = Bmesse::generate_auth_token(user_id)
@@ -46,9 +44,10 @@ end
 
 ### Push通知の送信
 
-メッセージの送信先ユーザへPush通知を送信します。  
-リクエストパラメタオブジェクト params をそのまま #push_notification() の引数に指定してください。  
-内部では Firebase Cloud Messaging サービスを利用して通知が送信され、戻り値には送信されたメッセージのIDが返りまが、その後の処理では特に必要ありません。
+Bメッセのクライアントライブラリから呼出されます。  
+メッセージの送信時に、送信先ユーザへPush通知を行います。    
+リクエストパラメタのオブジェクト params をそのまま #push_notification() の引数に指定してください。  
+内部では Firebase Cloud Messaging サービスを利用して通知が行われ、戻り値には送信されたメッセージのIDが返りまが、その後の処理では特に必要ありません。
 
 ```ruby
 require 'rubygems'
