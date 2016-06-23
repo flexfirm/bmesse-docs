@@ -17,13 +17,16 @@
 
 - /notification/title  
   プッシュ通知のタイトル
+
 - /notification/auth-key  
   プッシュ通知を行う際の Firebase サーバーキー。Firebaseのコンソール上の下記の場所から取得してください。  
-  Setting アイコン > Project Setting > CLOUD MESSAGING > Project keys > Server key 
+  Setting アイコン > Project Setting > CLOUD MESSAGING > Project keys > Server key
+
 - /firebase/secret  
   Firabaseのデータベースへ接続するための秘密鍵。Firebaseのコンソール上の下記の場所から取得してください。  
   Setting アイコン > Project Setting > DATABASE > Secrets > Database secrets  
   ※ マスクされている文字列にマウスカーソルを当てると "SHOW" ボタンが表示されます。
+
 - /firebase/auth-token/expires  
   Firebaeのカスタム認証により発行された認証トークンの有効期間（秒）。
 
@@ -38,6 +41,8 @@
 
 既存のアプリケーション認証処理の一環として組込みます。ログインしたユーザのIDを指定して #generate_auth_token() を呼出し認証トークンを発行します。  
 戻り値の token をクライアントへ返却し、以降の Bmesse の処理で使用します。
+
+#### サンプルコード
 
 ```ruby
 require 'rubygems'
@@ -67,6 +72,8 @@ Bメッセのクライアントライブラリから呼出されます。
 メッセージの送信時に、送信先ユーザへPush通知を行います。    
 リクエストパラメタのオブジェクト params をそのまま #push_notification() の引数に指定してください。  
 内部では Firebase Cloud Messaging サービスを利用して通知が行われ、戻り値には送信されたメッセージのIDが返りまが、その後の処理では特に必要ありません。
+
+#### サンプルコード
 
 ```ruby
 require 'rubygems'
