@@ -4,9 +4,28 @@
 
 ## Installation
 
+
+### gem モジュールのインストール
+
 **Ruby 2.0.0 以上** に対応します。 プロジェクトのルートディレクトリに gem ファイルを置き、下記コマンドでインストールしてください。
 
     gem install -l bmesse-1.0.0.gem --save-dev
+
+### 設定
+
+設定ファイル bmesse.yml を Rails の config ディレクトリに配置し、以下の項目を設定します。
+
+- /notification/title  
+  プッシュ通知のタイトル
+- /notification/auth-key  
+  プッシュ通知を行う際の Firebase サーバーキー。Firebaseのコンソール上の下記の場所から取得してください。  
+  Setting アイコン > Project Setting > CLOUD MESSAGING > Project keys > Server key 
+- /firebase/secret  
+  Firabaseのデータベースへ接続するための秘密鍵。Firebaseのコンソール上の下記の場所から取得してください。  
+  Setting アイコン > Project Setting > DATABASE > Secrets > Database secrets  
+  ※ マスクされている文字列にマウスカーソルを当てると "SHOW" ボタンが表示されます。
+- /firebase/auth-token/expires  
+  Firebaeのカスタム認証により発行された認証トークンの有効期間（秒）。
 
 ## Getting Started
 
