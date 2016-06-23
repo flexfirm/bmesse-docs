@@ -9,9 +9,9 @@
 
 **Ruby 2.0.0 以上** に対応します。 プロジェクトのルートディレクトリに gem ファイルを置き、下記コマンドでインストールしてください。
 
-    gem install -l bmesse-1.0.0.gem --save-dev
+    gem install -l bmesse-1.0.0.gem --development
 
-### 設定
+### bmesse.yml の設置
 
 設定ファイル bmesse.yml を Rails の config ディレクトリに配置し、以下の項目を設定します。
 
@@ -29,6 +29,14 @@
 
 - /firebase/auth-token/expires  
   Firebaeのカスタム認証により発行された認証トークンの有効期間（秒）。
+
+### Gemfile への追加
+
+Rails プロジェクトの場合はプロジェクトの Gemfile へ下記の記述を追加してください。
+
+```
+gem 'bmesse'
+```
 
 ## Getting Started
 
