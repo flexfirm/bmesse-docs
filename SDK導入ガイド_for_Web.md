@@ -45,19 +45,21 @@ BメッセSDKのファイル構成は以下の通りです
 </pre>
 
 <h2 id="Firebaseの設定">Firebaseの設定</h2>
-BメッセはGoogle社が提供している[Firebase](https://www.firebase.com/)を利用しています。  
+BメッセはGoogle社が提供している[Firebase](https://firebase.google.com/)を利用しています。  
 
 ### Firebaseアプリケーション作成
 まず、Bメッセを組み込むあなたのサービス用のFirebaseアプリケーションを作成する必要があります。  
-[ログイン画面](https://www.firebase.com/login/)よりログインして、アプリケーションの作成を行ってください。  
-ログインできたら、
-`APP NAME`、`APP URL`を決め、`CRETE NEW APP`ボタンを押したら作成完了です。  
-（※`APP URL`は後ほど利用します）  
-「アプリケーション」という名前ですが、主にあなたのサービスで利用するFirebaseのデータベースやPushの管理を行います。  
+[Firebase](https://firebase.google.com/)にログインして、アプリケーションの作成を行ってください。  
+ログインしたら、
+`CREATE NEW PROJECT`し、  
+`Project name`と`Country/region `を決めて  
+`CRETE PROJECT`ボタンを押したら作成完了です。  
+ここで作成したPROJECTは、主にあなたのサービスで利用するFirebaseのデータベースやPushの管理に利用します。  
 
 ### bmesse-config.jsの編集
 __Bmesse.FB__  
-URL：前の項で作成した`APP URL`で編集してください。  
+Firebaseで作成したプロジェクトのメニューにある`Database`をクリックしてください。  
+このページに記載されているURLで`Bmesse.FB`を編集してください。  
 Push通知を利用しない場合は以上で編集は終了です。  
 
 __Bmesse.NOTIFICATION_POST_URL__  
@@ -71,7 +73,7 @@ Bメッセを利用するページのhtmlファイルに以下のタグを入れ
 <script type="text/javascript" src="/bmesse-config.js"></script>
 <script type="text/javascript" src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
 ```
-※firebaseのバージョンは随時変更してください  
+※firebaseのバージョンは2.4.2をご利用ください  
 
 <h2 id="導入方法">導入方法</h2>
 導入方法については、SDKに付随しているRailsの`sample`アプリケーションを元に説明をします。  
