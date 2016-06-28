@@ -1,12 +1,12 @@
 # Bメッセ - SDK導入ガイド[javascript]
 
 ## 目次
-[Bメッセとは](#Bメッセとは)  
-[動作環境](#動作環境)  
-[ファイル構成](#ファイル構成)  
-[Firebaseの設定](#Firebaseの設定)  
-[インストール](#インストール)  
-[導入方法](#導入方法)  
+1. [Bメッセとは](#Bメッセとは)  
+1. [動作環境](#動作環境)  
+1. [ファイル構成](#ファイル構成)  
+1. [Firebaseの設定](#Firebaseの設定)  
+1. [インストール](#インストール)  
+1. [導入方法](#導入方法)  
 
 <h2 id="Bメッセとは">Bメッセとは</h2>
 ![アプリ側](http://s3-ap-northeast-1.amazonaws.com/s3.peraichi.com/userData/56712c45-2e90-4a3e-84bd-30de0a000007/img/1462937885/original.png)　　　　![Webサービス側](http://s3-ap-northeast-1.amazonaws.com/s3.peraichi.com/userData/56712c45-2e90-4a3e-84bd-30de0a000007/img/1462937892/original.png)　　
