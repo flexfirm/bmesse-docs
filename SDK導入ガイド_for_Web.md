@@ -4,6 +4,7 @@
 [Bメッセとは](#Bメッセとは)  
 [動作環境](#動作環境)  
 [ファイル構成](#ファイル構成)  
+[Firebaseの設定](#Firebaseの設定)  
 [インストール](#インストール)  
 [導入方法](#導入方法)  
 
@@ -13,7 +14,7 @@
 [Firebase](https://firebase.google.com/)を利用したリアルタイムチャット部品です。  
 あなたが運用するWebや、iOSアプリ、Androidアプリに、  
 安定したチャット機能を簡単に組み込む事ができます。  
-詳しくは[「Bメッセ」製品サイト](http://www.bmesse.com/?gh)をご覧ください。  
+機能について、詳しくは[「Bメッセ」製品サイト](http://www.bmesse.com/?gh)をご覧ください。  
 
 <h2 id="動作環境">動作環境</h2>
 ![Webサービス側](http://s3-ap-northeast-1.amazonaws.com/s3.peraichi.com/userData/56712c45-2e90-4a3e-84bd-30de0a000007/img/1462937892/original.png)　　
@@ -43,6 +44,26 @@ BメッセSDKのファイル構成は以下の通りです
 	├─bmesse-config.js  // Bメッセの設定ファイルです。
 	└─bmesse.css	// Bメッセ スタイルシートファイル
 </pre>
+
+<h2 id="Firebaseの設定">Firebaseの設定</h2>
+BメッセはGoogle社が提供している[Firebase](https://www.firebase.com/)を利用しています。  
+
+### Firebaseアプリケーション作成
+まず、Bメッセを組み込むあなたのサービス用のFirebaseアプリケーションを作成する必要があります。  
+[ログイン画面](https://www.firebase.com/login/)よりログインして、アプリケーションの作成を行ってください。  
+ログインできたら、
+`APP NAME`、`APP URL`を決め、`CRETE NEW APP`ボタンを押したら作成完了です。  
+（※`APP URL`は後ほど利用します）  
+「アプリケーション」という名前ですが、主にあなたのサービスで利用するFirebaseのデータベースやPushの管理を行います。  
+
+### bmesse-config.jsの編集
+__Bmesse.FB__  
+URL：前の項で作成した`APP URL`で編集してください。  
+Push通知を利用しない場合は以上で編集は終了です。  
+
+__Bmesse.NOTIFICATION_POST_URL__  
+Push通知を利用する際にはこの項目も編集してください。  
+<strong style="color:red;">TODO サーバライブラリ導入ガイド_for_Ruby「Push通知の送信」</strong>を実装したURLで編集してください。  
 
 <h2 id="インストール">インストール</h2>
 Bメッセを利用するページのhtmlファイルに以下のタグを入れてください  
