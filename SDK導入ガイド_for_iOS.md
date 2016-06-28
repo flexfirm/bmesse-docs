@@ -48,33 +48,14 @@ $ pod install
 
 Firebase を使うための設定が定義された "GoogleService-Info.plist" をプロジェクトのルートディレクトリに置きます。ファイルの取得方法は Firebase のドキュメント [Add Firebase to your iOS Project](https://firebase.google.com/docs/ios/setup) をご覧ください。
 
-### フレームワークおよびライブラリの追加
-
-BメッセSDK が必要とする以下のフレームワークを追加します。
-
-- SystemConfiguration.framework
-- Security.framework
-- CFNetwork.framework
-- libc++.tbd
-- libicucore.tbd
-- libsqlite3.0.tbd
-
-<strong style="color:red;">TODO: 動作させられていないので必要性は未確認</strong>
-
 ### Bメッセ Framework の追加
 
-アプリケーションプロジェクトのビルド設定 Link Binary With Libraries に Bmesse.framework を追加してください。
+アプリケーションプロジェクトに Bmesse.framework を Embedded Framework として追加します。手順は下記の通りです。
 
-### リンカフラグ設定
-
-アプリケーションプロジェクトのビルド設定 Other Linker Flags に以下2つの設定を追加してください。 Static Libraryに含まれるカテゴリクラスを利用するために必要な設定です。
-
--all_load ※
--ObjC
-
-※ アプリケーションで使用しているライブラリによっては "duplicate symbol" エラーが発生する場合があります。その場合は替わりに -force_load {環境に応じたパス}/libapphelp.a を指定してください。
-
-<strong style="color:red;">TODO: 動作させられていないので必要性は未確認</strong>
+1. Fileメニューより Bmesse.framework をファイルとしてプロジェクトに追加する。
+1. TARGET設定の "General" - "Linked Frameworks and Libraries" に追加した Bmesse.framework が含まれているので削除する。
+1. TARGET設定の "General" - "Embedded Binaries" に Bmesse.framework を追加する。
+1. TARGET設定の "Build Phases" - "Link Binary With Libraries" から Bmesse.framework を削除する。
 
 ### リソースファイル配置
 
@@ -83,13 +64,14 @@ SDKが使用する画像および言語ファイルが含まれています。 �
 
 ### iOS 9における設定
 
-Xcode 7.0以降では Info.plist に以下の設定を追加してください。 
+Xcode 7.0以降では Info.plist に以下の設定を追加してください。 {your server domain} には連携させるサーバのドメイン名を指定します。  
+また、http でアクセスさせる場合は "NSAllowsArbitraryLoads" も追加します。
 
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSExceptionDomains</key>
 		<dict>
-			<key>applihelp.com</key>
+			<key>{your server domain}</key>
 			<dict>
 				<key>NSIncludesSubdomains</key>
 				<true/>
@@ -99,9 +81,10 @@ Xcode 7.0以降では Info.plist に以下の設定を追加してください�
 				<string>TLSv1.0</string>
 			</dict>
 		</dict>
+		<!-- http アクセスを許可する場合 -->
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
 	</dict>
-
-<strong style="color:red;">TODO: 動作させられていないので必要性は未確認</strong>
 
 <h2 id="導入方法">導入方法</h2>
 
