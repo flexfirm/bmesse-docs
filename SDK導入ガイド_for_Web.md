@@ -9,7 +9,7 @@
 1. [導入方法](#導入方法)  
 
 <h2 id="Bメッセとは">Bメッセとは</h2>
-![アプリ側](http://s3-ap-northeast-1.amazonaws.com/s3.peraichi.com/userData/56712c45-2e90-4a3e-84bd-30de0a000007/img/1462937885/original.png)　　　　![Webサービス側](http://s3-ap-northeast-1.amazonaws.com/s3.peraichi.com/userData/56712c45-2e90-4a3e-84bd-30de0a000007/img/1462937892/original.png)　　
+![アプリ側](https://github.com/flexfirm/bmesse-docs/blob/img_branch/img/for_app.png?raw=true)　　　　![Webサービス側](https://github.com/flexfirm/bmesse-docs/blob/img_branch/img/for_web.png?raw=true)　　
 
 [Firebase](https://firebase.google.com/)を利用したリアルタイムチャット部品です。  
 あなたが運用するWebや、iOSアプリ、Androidアプリに、  
@@ -17,7 +17,7 @@
 機能について、詳しくは[「Bメッセ」製品サイト](http://www.bmesse.com/?gh)をご覧ください。  
 
 <h2 id="動作環境">動作環境</h2>
-![Webサービス側](http://s3-ap-northeast-1.amazonaws.com/s3.peraichi.com/userData/56712c45-2e90-4a3e-84bd-30de0a000007/img/1462937892/original.png)　　
+![Webサービス側](https://github.com/flexfirm/bmesse-docs/blob/img_branch/img/for_web.png?raw=true)　　
 
 __Chrome（for Windows）__  
 
@@ -29,20 +29,19 @@ __Chrome（for Windows）__
 【注意】  
 本ガイドは、Webサービス側の利用者がBメッセを使えるようにするための導入ガイドとなります。  
 別途サーバー用の設定と、アプリ用の設定が必要となります。  
-サーバ用のガイドはこちら<strong style="color:red;">TODO ←あとでリンク付ける</strong>  
-アプリ用のガイドはこちら<strong style="color:red;">TODO ←あとでリンク付ける</strong>  
+[サーバ用のガイドはこちら](../サーバライブラリ導入ガイド_for_Ruby.md)  
+[アプリ用のガイドはこちら](../SDK導入ガイド_for_iOS.md)  
 
 <h2 id="ファイル構成">ファイル構成</h2>
 BメッセSDKのファイル構成は以下の通りです  
-<strong style="color:red;">TODO 最後にフォルダ構成確認</strong>
 <pre>
-/
-├─docs         // APIリファレンスです。
-├─sample       // Railsのサンプルアプリケーションです。
-└─sdk
-	├─bmesse.js     // Bメッセ SDK本体です。
-	├─bmesse-config.js  // Bメッセの設定ファイルです。
-	└─bmesse.css	// Bメッセ スタイルシートファイル
+/web-sdk
+	├─ api-doc		// APIリファレンスです。
+	├─ css
+	|	└─bmesse-バージョン番号.css		// Bメッセのスタイルシートです。
+	└─ js
+		├─bmesse-バージョン番号.js			// Bメッセ SDK本体です。
+		└─bmesse-config.js				// Bメッセの設定ファイルです。
 </pre>
 
 <h2 id="Firebaseの設定">Firebaseの設定</h2>
@@ -63,15 +62,14 @@ Push通知を利用しない場合は以上で編集は終了です。
 
 __Bmesse.NOTIFICATION_POST_URL__  
 Push通知を利用する際にはこの項目も編集してください。  
-<strong style="color:red;">TODO サーバライブラリ導入ガイド_for_Ruby「Push通知の送信」</strong>を実装したURLで編集してください。  
+[サーバライブラリ導入ガイド_for_Ruby](../サーバライブラリ導入ガイド_for_Ruby.md)の__Push通知の送信__で実装したURLで編集してください。  
 
 <h2 id="インストール">インストール</h2>
 Bメッセを利用するページのhtmlファイルに以下のタグを入れてください  
-<strong style="color:red;">TODO Firebaseのバージョン確認</strong>  
 ```
 <script type="text/javascript" src="/bmesse.js"></script>
 <script type="text/javascript" src="/bmesse-config.js"></script>
-<script type="text/javascript" src="https://cdn.firebase.com/js/client/3.*.*/firebase.js"></script>
+<script type="text/javascript" src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
 ```
 ※firebaseのバージョンは随時変更してください  
 
@@ -170,13 +168,13 @@ __`appUserId`__： アプリ側のユーザーIDを渡します。
 __`appUserName`__： アプリ側のユーザー名を渡します。これはチャットルームのヘッダーに表示されます。  
 
 指定したセレクタ部分に以下のようなチャットルーム表示されます。  
-![](https://s3-ap-northeast-1.amazonaws.com/s3.peraichi.com/userData/56712c45-2e90-4a3e-84bd-30de0a000007/img/1466402383/original.PNG)  
+![img](https://github.com/flexfirm/bmesse-docs/blob/img_branch/img/chat_ui.PNG?raw=true)  
 
 ## アプリユーザーの状態を受け取る
 例えばあなたのサービスが、以下のようにアプリユーザー一覧の表示が必要なサービスだったとします。  
 その場合、アプリユーザーの__「ステータス」__やメッセージの__「新着」__などの情報を、あなたのサービス内に表示する必要があります（赤枠）  
 そのよう場合についてご説明します。  
-![img](https://s3-ap-northeast-1.amazonaws.com/s3.peraichi.com/userData/56712c45-2e90-4a3e-84bd-30de0a000007/img/1466668373/original.jpg)
+![img](https://github.com/flexfirm/bmesse-docs/blob/img_branch/img/app_sample.jpg?raw=true)
 
 ### ユーザー一覧を取得する
 ```
@@ -337,8 +335,6 @@ appUsersAssociationWithWebUsers.addListenerLatestMessageChanged(function (messag
 	}
 });
 ```
-<strong style="color:red;">TODO （４）-7 がtrueの場合は（４）-5が受け取れないようにする必要ある  
-</strong>
 `function (callbackIsRead, newMessage) {処理}`の部分をご覧ください。  
 この`{処理}`の部分は、新着メッセージがあるたびに発生します。  
 なお、`{処理}`内で取得できるのは`Message`オブジェクトで、  
@@ -369,8 +365,7 @@ appUserOrMyLastMessage.isRead(myUserId,function (callbackIsRead, newMessage) {
 
 ### アプリユーザーからのメッセージの付加情報を受け取る
 このメソッドは、アプリユーザーからのメッセージに付加情報を付けた場合のみ利用できます。  
-付加情報の設定の仕方について、詳しくは<strong style="color:red;">TODO アプリのSDK導入ガイドのここ</strong>
-をご参照ください。  
+付加情報の設定の仕方について、詳しくは[アプリのSDK導入ガイド](../SDK導入ガイド_for_iOS.md)をご参照ください。  
 なお、取得できる付加情報は、最新のメッセージの付加情報のみです。  
 最新のメッセージに付加情報が無い場合は、最後に送信された付加情報を取得できます。  
 
