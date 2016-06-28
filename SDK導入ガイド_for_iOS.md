@@ -48,7 +48,7 @@ $ pod install
 
 Firebase を使うための設定が定義された "GoogleService-Info.plist" をプロジェクトのルートディレクトリに置きます。ファイルの取得方法は Firebase のドキュメント [Add Firebase to your iOS Project](https://firebase.google.com/docs/ios/setup) をご覧ください。
 
-### フレームワーク追加
+### フレームワークおよびライブラリの追加
 
 BメッセSDK が必要とする以下のフレームワークを追加します。
 
