@@ -9,13 +9,13 @@
 
 <h2 id="動作環境">動作環境</h2>
 
-- iOS 7.1.2 以上
-- iOS SDK 8.1 以上
-- Xcode 7.3 以上
+- iOS 7.0.0 以上
+- iOS SDK 9.3 以上
+- Xcode 7.3.1 以上
 
 ### 注意
 
-本SDKの利用には別途サーバ側の構築が必要です。詳しくは[サーバライブラリ導入ガイドイド](https://github.com/flexfirm/bmesse-docs/blob/master/%E3%82%B5%E3%83%BC%E3%83%90%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E5%B0%8E%E5%85%A5%E3%82%AC%E3%82%A4%E3%83%89_for_Ruby.md)をご覧ください。  
+本SDKの利用には別途サーバ側の構築が必要です。詳しくは[サーバライブラリ導入ガイド](https://github.com/flexfirm/bmesse-docs/blob/master/%E3%82%B5%E3%83%BC%E3%83%90%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E5%B0%8E%E5%85%A5%E3%82%AC%E3%82%A4%E3%83%89_for_Ruby.md)をご覧ください。  
 
 <h2 id="ファイル構成">ファイル構成</h2>
 BメッセSDKのファイル構成は以下の通りです。  
@@ -46,7 +46,7 @@ $ pod install
 
 ### GoogleService-Info.plist の設置
 
-Firebase を使うための設定が定義された "GoogleService-Info.plist" をプロジェクトのルートディレクトリに置きます。ファイルの取得方法は Firebase のドキュメント [Add Firebase to your iOS Project](https://firebase.google.com/docs/ios/setup) をご覧ください。
+Firebase を使うための設定が定義された "GoogleService-Info.plist" をプロジェクトのルートディレクトリに置きます。ファイルの取得方法は Firebase のドキュメント [Add Firebase to your iOS Project](https://support.google.com/firebase/answer/7015592) をご覧ください。
 
 ### Bメッセ Framework の追加
 
