@@ -27,10 +27,11 @@ __Chrome（for Windows）__
 
 
 【注意】  
-本ガイドは、Webサービス側の利用者がBメッセを使えるようにするための導入ガイドとなります。  
-別途サーバー用の設定と、アプリ用の設定が必要となります。  
-[サーバ用のガイドはこちら](./サーバライブラリ導入ガイド_for_Ruby.md)  
-[アプリ用のガイドはこちら](./SDK導入ガイド_for_iOS.md)  
+本ガイドは、Webアプリケーションのクライアント側の利用者がBメッセを使えるようにするための導入ガイドとなります。  
+別途Webアプリケーションのサーバ用の設定と、アプリ用の設定が必要となります。  
+[Webアプリケーションのサーバ用のガイドはこちら](./サーバライブラリ導入ガイド_for_Ruby.md)  
+[iOSアプリ用のガイドはこちら](./SDK導入ガイド_for_iOS.md)  
+※Androidアプリ用のガイドは次期バージョンで追加されます。  
 
 <h2 id="ファイル構成">ファイル構成</h2>
 BメッセSDKのファイル構成は以下の通りです  
@@ -67,13 +68,17 @@ Push通知を利用する際にはこの項目も編集してください。
 [サーバライブラリ導入ガイド_for_Ruby](./サーバライブラリ導入ガイド_for_Ruby.md)の__Push通知の送信__で実装したURLで編集してください。  
 
 <h2 id="インストール">インストール</h2>
+以下のファイルをWebアプリケーションのクライアント側に設置してください。  
+`bmesse-バージョン番号.css`、`bmesse-バージョン番号.js`、`bmesse-config.js`  
+
 Bメッセを利用するページのhtmlファイルに以下のタグを入れてください  
 ```
-<script type="text/javascript" src="/bmesse.js"></script>
-<script type="text/javascript" src="/bmesse-config.js"></script>
+<link rel="stylesheet" type="text/css" href="{bmesse-バージョン番号.cssへのパス}">
+<script type="text/javascript" src="{bmesse-バージョン番号.jsへのパス}"></script>
+<script type="text/javascript" src="{bmesse-config.jsへのパス}"></script>
 <script type="text/javascript" src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
 ```
-※firebaseのバージョンは2.4.2をご利用ください  
+※[firebaseのバージョンは2.4.2](https://cdn.firebase.com/js/client/2.4.2/firebase.js)をご利用ください  
 
 <h2 id="導入方法">導入方法</h2>
 導入方法については、SDKに付随しているRailsの`sample`アプリケーションを元に説明をします。  
@@ -389,7 +394,7 @@ bmesse.getAdditionalInfo(appUserId, function(addtionalIntfo){
 });
 ```
 ## チャットルームの外観を変更する
-`bmesse.css`を編集してください。  
+`bmesse-バージョン番号.css`を編集してください。  
 詳細はファイルのコメントを直接ご覧ください。  
 
 ## 変更履歴
