@@ -27,7 +27,10 @@
 - /notification/title  
   プッシュ通知のタイトル
 
-- /notification/auth-key  
+- /notification/fcm-post-url  
+  プッシュ通知を行う際の送信先。通常変更する必要はありません。
+
+- /notification/server-key  
   プッシュ通知を行う際の Firebase サーバーキー。Firebaseのコンソール上の下記の場所から取得してください。  
   Setting アイコン > Project Setting > CLOUD MESSAGING > Project keys > Server key
 
