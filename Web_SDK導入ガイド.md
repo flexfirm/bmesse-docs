@@ -2,12 +2,12 @@
 
 
 ## 目次
-1. [Bメッセとは](#Bメッセとは)  
-1. [動作環境](#動作環境)  
-1. [ファイル構成](#ファイル構成)  
-1. [Firebaseの設定](#Firebaseの設定)  
-1. [インストール](#インストール)  
-1. [導入方法](#導入方法)  
+[Bメッセとは](#Bメッセとは)  
+[動作環境](#動作環境)  
+[ファイル構成](#ファイル構成)  
+[Firebaseの設定](#Firebaseの設定)  
+[インストール](#インストール)  
+[使用方法](#使用方法)  
 
 <h2 id="Bメッセとは">Bメッセとは</h2>
 ![アプリ側](https://github.com/flexfirm/bmesse-docs/blob/img_branch/img/for_app.png?raw=true)　　　　![Webサービス側](https://github.com/flexfirm/bmesse-docs/blob/img_branch/img/for_web.png?raw=true)　　
@@ -81,8 +81,8 @@ Bメッセを利用するページのhtmlファイルに以下のタグを入れ
 ```
 ※[firebaseのバージョンは2.4.2](https://cdn.firebase.com/js/client/2.4.2/firebase.js)をご利用ください  
 
-<h2 id="導入方法">導入方法</h2>
-導入方法については、SDKに付随しているRailsの`sample`アプリケーションを元に説明をします。  
+<h2 id="使用方法">使用方法</h2>
+使用方法については、SDKに付随しているRailsの`sample`アプリケーションを元に説明をします。  
 ### Bメッセ 認証処理
 Bメッセのインスタンス生成前に必ず実行してください  
 
