@@ -3,14 +3,15 @@
 [動作環境](#動作環境)  
 [ファイル構成](#ファイル構成)  
 [インストール](#インストール)  
-[導入方法](#導入方法)  
+[使用方法](#使用方法)  
 [変更履歴](#変更履歴)  
 
 <h2 id="動作環境">動作環境</h2>
 
-- iOS 7.0.0 以上
+- iOS 7.0 以上
 - iOS SDK 9.3 以上
 - Xcode 7.3.1 以上
+- Swiftのみ
 
 ### 注意
 
@@ -56,15 +57,12 @@ Firebase を使うための設定が定義された "GoogleService-Info.plist" �
 1. TARGET設定の "General" - "Embedded Binaries" に Bmesse.framework を追加する。
 1. TARGET設定の "Build Phases" - "Link Binary With Libraries" から Bmesse.framework を削除する。
 
-### リソースファイル配置
-
-/Bmesse.framework/BmesseResources に含まれる全てのリソースファイルをアプリケーションプロジェクトのビルド設定 Copy Bundle Resources に追加してください。  
-SDKが使用する画像および言語ファイルが含まれています。 ファイル名は変更しないでください。
-
 ### iOS 9における設定
 
-Xcode 7.0以降では Info.plist に以下の設定を追加してください。 {your server domain} には連携させるサーバのドメイン名を指定します。  
-また、http でアクセスさせる場合は "NSAllowsArbitraryLoads" も追加します。
+Info.plist に以下の設定を追加してください。 {your server domain} には連携させるサーバのドメイン名を指定します。  
+今回新たに認証サーバへアクセスする場合も同様です。  
+また、http でアクセスさせる場合は "NSAllowsArbitraryLoads" も追加します。  
+__※__ 2017年1月よりhttpsでのアクセスが必須になりhttpでアクセスするアプリはリジェクト対象になるためご注意ください。
 
 	<key>NSAppTransportSecurity</key>
 	<dict>
@@ -85,9 +83,9 @@ Xcode 7.0以降では Info.plist に以下の設定を追加してください�
 		<true/>
 	</dict>
 
-<h2 id="導入方法">導入方法</h2>
+<h2 id="使用方法">使用方法</h2>
 
-導入方法については、SDKに付随しているサンプルアプリケーションを元に説明をします。
+使用方法については、SDKに付随しているサンプルアプリケーションを元に説明をします。
 サンプルコードは全て Swift です。
 
 下記コードにてBメッセのモジュールをインポートします。
@@ -97,10 +95,31 @@ Xcode 7.0以降では Info.plist に以下の設定を追加してください�
 
 ### 認証処理
 
-Bメッセのインスタンス生成前に必ず実行してください
+Bメッセを利用するためには、まず最初に認証処理が必要です。アプリケーションの認証処理において認証トークンを発行し、そのトークンを使って認証を行います。  
+Bmesse インスタンスを生成する前に必ず実行してください。
 
-<strong style="color:red;">TODO: 修正中のため後日更新</strong>
-
+    Bmesse.authenticate(
+        // Firebaseトークン
+        authToken:authToken,
+        // 認証完了
+        completeCallback: { (error, authInfo) in
+            if error != nil {
+                print("認証でエラーが発生")
+            }
+            else {
+                // 認証情報
+                print("認証に成功")
+                print(authInfo)
+                // ユーザーステータスの変更感知を開始
+                Bmesse.startUserStatusListener()
+            }
+        },
+        // トークンの期限切れ
+        expiredCallback: {
+            print("トークンの有効期限が切れました")
+            // TODO: アプリケーションで実装している認証処理を呼び出すなど。
+        }
+    )
 
 ### ログインユーザの設定
 
@@ -167,6 +186,7 @@ __取得できる状態__
 |:------:|:------:|
 | オンライン |SystemUserStatusEnum.Online|
 | オフライン |SystemUserStatusEnum.Offline|
+| 相談中 |SystemUserStatusEnum.InConsultation|
 
 
 
@@ -180,7 +200,8 @@ __取得できる状態__
 
 |状態                |Bメッセでの定数 (int) |
 |:-----------------:|:------:|
-| チャット中            |ThreadUserStatusEnum.Active|
+| チャット中（アクティブ）            |ThreadUserStatusEnum.Active|
+| チャット中（非アクティブ）            |ThreadUserStatusEnum.Inactive|
 | 書込み中            |ThreadUserStatusEnum.Writing|
 | 退出中             |ThreadUserStatusEnum.Left|
 
@@ -211,8 +232,8 @@ __取得できる状態__
 
 各テキストラベルのローカライゼーション文字列を変更する場合は以下のファイルを編集してください。
 
-	/Bmesse.framework/BmesseResources/languages/en.lproj
-	/Bmesse.framework/BmesseResources/languages/ja.lproj
+	/Bmesse.framework/BmesseResources/languages/en.lproj/BMSLocalizable.strings
+	/Bmesse.framework/BmesseResources/languages/ja.lproj/BMSLocalizable.strings
 
 
 <h2 id="変更履歴">変更履歴</h2>
