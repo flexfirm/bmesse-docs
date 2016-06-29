@@ -4,7 +4,6 @@
 
 <pre>
 bmesse.zip
-    readme.txt
     server-lib
         api-doc
         bmesse-1.0.0.gem
