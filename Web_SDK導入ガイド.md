@@ -164,11 +164,11 @@ bmesse.setAcceptableLimit(limit);
 __`limit`__： 同時チャットできる数を渡します。  
 この数以上の人数とチャットした場合、アプリユーザー側で「相談中」という状態を受け取れるようになります。  
 
-### チャット窓の表示
+### チャットルームの表示
 ```
 bmesse.showMessageThread(selector,appUserId,appUserName);
 ```
-__`selector`__:　チャット窓（以下チャットルーム）をはめ込む箇所の、htmlタグid属性を指定します。  
+__`selector`__:　チャットルームをはめ込む箇所の、htmlタグid属性を指定します。  
 　例えば　、チャットルームをはめ込みたい場所が`<div id="messages_container"></div>`だった場合、  
 　`selector`の部分に`'#messages_container'`を渡します。  
 
