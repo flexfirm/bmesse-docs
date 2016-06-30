@@ -18,5 +18,4 @@ bmesse.zip
     ios-sdk
         api-doc
         Bmesse.framework
-        sample
 </pre>
