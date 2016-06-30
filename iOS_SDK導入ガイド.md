@@ -47,7 +47,6 @@ BメッセSDKのファイル構成は以下の通りです。
 <pre>
 /ios-sdk
     ├─api-docs         // APIリファレンス
-    ├─sample           // Bメッセを導入したサンプルアプリケーション
     └─Bmesse.framework // BメッセFrameworkライブラリ
 </pre>
 
