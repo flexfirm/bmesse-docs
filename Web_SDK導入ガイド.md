@@ -1,22 +1,28 @@
 # Bメッセ V1.0 - Web SDK導入ガイド
+本ガイドは、WebクライアントのオペレーターがBメッセを使えるようにするための導入ガイドです。  
+別途、サーバアプリケーションおよびネイティブアプリへの導入も必要です。  
+[RubyOnRails_サーバライブラリ導入ガイドはこちら](./RubyOnRails_サーバライブラリ導入ガイド.md)  
+[iOS_SDK導入ガイドはこちら](./iOS_SDK導入ガイド.md)  
 
 ## 目次
-[Bメッセとは](#Bメッセとは)  
+[Bメッセとは](#Bメッセとは) 
+[用語](#用語) 
 [動作環境](#動作環境)  
 [ファイル構成](#ファイル構成)  
+[Firebaseの設定](#Firebaseの設定)  
 [インストール](#インストール)  
-[導入方法](#導入方法)  
+[使用方法](#使用方法)  
 
 <h2 id="Bメッセとは">Bメッセとは</h2>
-![アプリ側](http://s3-ap-northeast-1.amazonaws.com/s3.peraichi.com/userData/56712c45-2e90-4a3e-84bd-30de0a000007/img/1462937885/original.png)　　　　![Webサービス側](http://s3-ap-northeast-1.amazonaws.com/s3.peraichi.com/userData/56712c45-2e90-4a3e-84bd-30de0a000007/img/1462937892/original.png)　　
+![アプリ側](https://github.com/flexfirm/bmesse-docs/blob/img_branch/img/for_app.png?raw=true)　　　　![Webサービス側](https://github.com/flexfirm/bmesse-docs/blob/img_branch/img/for_web.png?raw=true)　　
 
 [Firebase](https://firebase.google.com/)を利用したリアルタイムチャット部品です。  
 あなたが運用するWebや、iOSアプリ、Androidアプリに、  
 安定したチャット機能を簡単に組み込む事ができます。  
-詳しくは[「Bメッセ」製品サイト](http://www.bmesse.com/?gh)をご覧ください。  
+機能について、詳しくは[「Bメッセ」製品サイト](http://www.bmesse.com/?gh)をご覧ください。  
 
 <h2 id="動作環境">動作環境</h2>
-![Webサービス側](http://s3-ap-northeast-1.amazonaws.com/s3.peraichi.com/userData/56712c45-2e90-4a3e-84bd-30de0a000007/img/1462937892/original.png)　　
+![Webサービス側](https://github.com/flexfirm/bmesse-docs/blob/img_branch/img/for_web.png?raw=true)　　
 
 __Chrome（for Windows）__  
 
@@ -24,45 +30,82 @@ __Chrome（for Windows）__
 ・Chrome(for Mac)  
 ・Safari(for Mac)  
 
+<h2 id="用語">用語</h2>
+### Webアプリケーション
+特に断りの無い限り、チャット機能を組み込む対象のWebアプリケーションのことを指します。
+サーバ上で稼働するサーバアプリケーション、ブラウザ上で動作するWebクライアント、スマートフォン上で動作するネイティブアプリから構成されると想定します。
 
-【注意】  
-本ガイドは、Webサービス側の利用者がBメッセを使えるようにするための導入ガイドとなります。  
-別途サーバー用の設定と、アプリ用の設定が必要となります。  
-サーバ用のガイドはこちら<strong style="color:red;">TODO ←あとでリンク付ける</strong>  
-アプリ用のガイドはこちら<strong style="color:red;">TODO ←あとでリンク付ける</strong>  
+### ユーザー
+特に断りの無い限り、Webアプリケーションで認証されたユーザーの中で、チャット機能を使用できるようにされたユーザーを指します。
+一般のユーザー（以降、アプリユーザー）と、それに応対するオペレーターの2種類が存在します。
+アプリユーザーは、アプリからチャット機能を使用し、オペレーターはWebクライアントから使用します。
+ユーザーはオンライン、オフラインのどちらかの状態にいるよう制御され、それぞれの状態によってできることや、チャット相手の表示が変わります。
+オペレーターはオンラインの一種として、相談中という状態も持ちます。これはオンラインであるが、応対できるアプリユーザーの上限に達している状態です。
+
+### メッセージ
+アプリユーザーとオペレーターの間で都度、送受信されるテキスト等をさします。
+
+### スレッド
+メッセージを送受信するために確立された特定のアプリユーザーとオペレーターの繋がり、およびそこでやり取りされた一連のメッセージを指します。
+
+### チャットルーム
+特定のアプリユーザーとオペレータの間でスレッドが共有され、メッセージの送受信ができる画面を指します。
+また、アプリユーザーとオペレーターはそれぞれ、チャット中、書き込み中、退出中など、チャットルーム内での状態を持ち、相手方に表示されます。
 
 <h2 id="ファイル構成">ファイル構成</h2>
 BメッセSDKのファイル構成は以下の通りです  
-<strong style="color:red;">TODO 最後にフォルダ構成確認</strong>
 <pre>
-/
-├─docs         // APIリファレンスです。
-├─sample       // Railsのサンプルアプリケーションです。
-└─sdk
-	├─bmesse.js     // Bメッセ SDK本体です。
-	├─bmesse-config.js  // Bメッセの設定ファイルです。
-	└─bmesse.css	// Bメッセ スタイルシートファイル
+/web-sdk
+	├─ api-doc		// APIリファレンスです。
+	├─ css
+	|	└─bmesse-バージョン番号.css		// Bメッセのスタイルシートです。
+	└─ js
+		├─bmesse-バージョン番号.js			// Bメッセ SDK本体です。
+		└─bmesse-config.js				// Bメッセの設定ファイルです。
 </pre>
 
-<h2 id="インストール">インストール</h2>
-Bメッセを利用するページのhtmlファイルに以下のタグを入れてください  
-<strong style="color:red;">TODO Firebaseのバージョン確認</strong>  
-```
-<script type="text/javascript" src="/bmesse.js"></script>
-<script type="text/javascript" src="/bmesse-config.js"></script>
-<script type="text/javascript" src="https://cdn.firebase.com/js/client/3.*.*/firebase.js"></script>
-```
-※firebaseのバージョンは随時変更してください  
+<h2 id="Firebaseの設定">Firebaseの設定</h2>  
 
-<h2 id="導入方法">導入方法</h2>
-導入方法については、SDKに付随しているRailsの`sample`アプリケーションを元に説明をします。  
+### Firebaseアプリケーション作成
+まず、Bメッセを組み込むWebアプリケーション用のFirebaseアプリケーションを作成する必要があります。  
+[Firebase](https://firebase.google.com/)にログインして、アプリケーションの作成を行ってください。  
+ログインしたら、
+`CREATE NEW PROJECT`し、  
+`Project name`と`Country/region `を決めて  
+`CREATE PROJECT`ボタンを押したら作成完了です。  
+ここで作成したPROJECTは、Webアプリケーションで利用するFirebaseのデータベースやPushの管理に利用します。  
+
+### bmesse-config.jsの編集
+__Bmesse.FB__  
+Firebaseで作成したプロジェクトのメニューにある`Database`をクリックしてください。  
+このページに記載されているURLで`Bmesse.FB`を編集してください。  
+
+__Bmesse.NOTIFICATION_POST_URL__  
+Push通知を使用する際にはこの項目も編集してください。  
+[RubyOnRails_サーバライブラリ導入ガイド](./RubyOnRails_サーバライブラリ導入ガイド.md)の__Push通知の送信__で実装したURLで編集してください。  
+
+<h2 id="インストール">インストール</h2>
+以下のファイルをWebクライアントに設置してください。  
+`bmesse-バージョン番号.css`、`bmesse-バージョン番号.js`、`bmesse-config.js`  
+
+Bメッセを使用するページのhtmlファイルに以下のタグを入れてください  
+```
+<link rel="stylesheet" type="text/css" href="{bmesse-バージョン番号.cssへのパス}">
+<script type="text/javascript" src="{bmesse-バージョン番号.jsへのパス}"></script>
+<script type="text/javascript" src="{bmesse-config.jsへのパス}"></script>
+<script type="text/javascript" src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
+```
+※[firebaseのバージョンは2.4.2](https://cdn.firebase.com/js/client/2.4.2/firebase.js)を利用ください  
+
+<h2 id="使用方法">使用方法</h2>
+使用方法については、SDKに付随しているRailsの`sample`アプリケーションを例に説明をします。  
 ### Bメッセ 認証処理
 Bメッセのインスタンス生成前に必ず実行してください  
 
 ```
 Bmesse.authenticate = function(authToken, completeCallback, expiredCallback);
 ```
-利用例）
+使用例）
 ```
 Bmesse.authenticate(authToken,
 	//completeCallback関数
@@ -83,7 +126,7 @@ Bmesse.authenticate(authToken,
 });
 
 ```
-__`authToken`__： あなたのサービスで利用している認証トークンを渡します。  
+__`authToken`__： サーバアプリケーションで取得した認証トークンを渡します。  
 __`completeCallback`__： 認証の返答が返ってきた時の処理を渡します。  
 　・認証時にエラーがあった場合は`errorInfo`にその情報が入ります。  
 　エラーが無い場合はBメッセのインスタンスをここで生成します。  
@@ -92,36 +135,39 @@ __`expiredCallback`__： 認証期限が切れた際の処理を渡します。
 
 ### Bメッセインスタンスを生成する
 
-Bメッセを利用するために必ず実行してください。  
+Bメッセを使用するために必ず実行してください。  
 
 ```
 var bmesse = new Bmesse(myUserId);
 ```
-__`myUserId`__： あなたのサービスにおけるWebユーザーのIDを渡します。  
+__`myUserId`__： WebアプリケーションにログインしたユーザーのIDを渡します。  
 
 以降は、この`bmesse`インスタンスを用いて説明を行います。  
 
-### Bメッセのオンライン・オフライン
-#### ユーザーをオンラインにする
+### オペレーターのオンライン・オフライン状態の制御
+#### オペレーターをオンラインにする
+オペレーターをチャット可能な状態にするためにこのメソッドを呼びます。  
 ```
 bmesse.onLine();
 ```
-#### ユーザーをオフラインにする
+#### オペレーターをオフラインにする
+オペレーターがチャットを受け付けないようにするために、このメソッドを呼びます。  
 ```
 bmesse.offLine();
 ```
+なおオフライン時には、自動返信やメールによる通知の機能が働きます。  
+__・自動返信__  
+オフライン時にアプリユーザーがチャットをしてきた場合、アプリユーザーに以下の自動返信が行われます。  
+_「～システムより自動返信～  
+現在オフライン中、または他の方とご相談中のため、返信にお時間がかかります。  
+ご容赦くださいませ」_  
 
-Bメッセには「オンライン」状態と、「オフライン」状態があります。  
-これは、あなたのサービスの利用者の状態（例えばサービスの「ログイン」と「ログオフ」）と、  
-Bメッセの状態を同期させるための機能です。  
-使える機能に大きな違いはありませんが、アプリユーザーからの見え方が異なります。  
+__・メールによる通知__  
+オフライン時にアプリユーザーがチャットをしてきた場合、それを知らせる旨のメールがオペレーターのアドレスへ送信されます。  
 
-あるアプリユーザーとのチャット画面を開いても、  
-「オフライン」時ではアプリユーザーからは全て「退出中」だと認識されます。  
+#### アプリユーザーから見えるオペレーターの状態（チャットルーム）
 
-__アプリユーザーから見える状態の違い__  
-
-| オンライン | オフライン |
+| オンライン時 | オフライン時 |
 |:------:|:------:|
 | チャット中 |退出中  |
 | 書込み中  |退出中 |
@@ -129,19 +175,19 @@ __アプリユーザーから見える状態の違い__
 
 ※デフォルトは「オフライン」状態です。  
 
-### 同時チャット可能な人数の設定
-あなたのサービスの利用者が、複数のアプリユーザーと同時チャットできる人数を設定します。  
+### 同時チャット可能なアプリユーザー数の設定
+オペレーターが、複数のアプリユーザーと同時チャットできる人数の上限を設定します。  
 ```
 bmesse.setAcceptableLimit(limit);
 ```
 __`limit`__： 同時チャットできる数を渡します。  
-この数以上の人数とチャットした場合、アプリユーザー側で「相談中」という状態を受け取れるようになります。  
+人数の上限に達しているオペレーターに関して、アプリユーザー側で「相談中」という状態を受け取れるようになります。  
 
-### チャット窓の表示
+### チャットルームの表示
 ```
 bmesse.showMessageThread(selector,appUserId,appUserName);
 ```
-__`selector`__:　チャット窓（以下チャットルーム）をはめ込む箇所の、htmlタグid属性を指定します。  
+__`selector`__:　チャットルームをはめ込む箇所の、htmlタグid属性を指定します。  
 　例えば　、チャットルームをはめ込みたい場所が`<div id="messages_container"></div>`だった場合、  
 　`selector`の部分に`'#messages_container'`を渡します。  
 
@@ -149,15 +195,14 @@ __`appUserId`__： アプリ側のユーザーIDを渡します。
 __`appUserName`__： アプリ側のユーザー名を渡します。これはチャットルームのヘッダーに表示されます。  
 
 指定したセレクタ部分に以下のようなチャットルーム表示されます。  
-![](https://s3-ap-northeast-1.amazonaws.com/s3.peraichi.com/userData/56712c45-2e90-4a3e-84bd-30de0a000007/img/1466402383/original.PNG)  
+![img](https://github.com/flexfirm/bmesse-docs/blob/img_branch/img/chat_ui.PNG?raw=true)  
 
 ## アプリユーザーの状態を受け取る
-例えばあなたのサービスが、以下のようにアプリユーザー一覧の表示が必要なサービスだったとします。  
-その場合、アプリユーザーの__「ステータス」__やメッセージの__「新着」__などの情報を、あなたのサービス内に表示する必要があります（赤枠）  
-そのよう場合についてご説明します。  
-![img](https://s3-ap-northeast-1.amazonaws.com/s3.peraichi.com/userData/56712c45-2e90-4a3e-84bd-30de0a000007/img/1466668373/original.jpg)
+例えばWebクライアントで、以下のようにアプリユーザー一覧の表示する場合、アプリユーザーの__「状態」__やメッセージの__「新着」__などの情報を、Webクライアント内に表示する必要があります（赤枠）  
+そのよう場合について説明します。  
+![img](https://github.com/flexfirm/bmesse-docs/blob/img_branch/img/app_sample.jpg?raw=true)
 
-### ユーザー一覧を取得する
+### アプリユーザー一覧を取得する
 ```
 //Webユーザーの、全アプリユーザーとの関係を取得し
 var myAssociationWithAppUsers = bmesse.getUserAssociationModel();
@@ -181,9 +226,9 @@ myAssociationWithAppUsers.addListenerAssociationAdded(function (userInfo) {
 });
 ```
 上記の`function(userInfo){処理}`の部分をご覧ください。  
-この`{処理}`の部分は、Webユーザーと関係を持つアプリユーザーの数分だけイベントが発生します。  
-例えば、3人のアプリユーザーと会話をしたWebユーザーの場合、3人分のuserInfoを取得するイベントが走ります。  
-また、新たに4人目のアプリユーザーが会話をしてきた時もこのイベントが走ります。  
+この`{処理}`の部分は、オペレーター（Webユーザー）と関係を持つアプリユーザーの数分だけイベントが発生します。  
+例えば、3人のアプリユーザーとチャットをしたことのあるオペレーターの場合、3人分のuserInfoを取得するイベントが走ります。  
+また、新たに4人目のアプリユーザーがチャットを開始してきた時もこのイベントが走ります。  
 
 なお、`{処理}`内で取得できる（１）～（５）の詳細は以下です。  
 
@@ -195,13 +240,13 @@ myAssociationWithAppUsers.addListenerAssociationAdded(function (userInfo) {
 | （４） |Bmesse.UserAssociationオブジェクト|
 | （５） |Bmesse.Messageオブジェクト|
 
-それでは（１）～（５）の具体的な利用方法を説明します。  
+それでは（１）～（５）の具体的な使用方法を説明します。  
 
 ### アプリユーザーの情報を表示する
-あなたのサービスのDBからデータを取得して、アプリユーザーの情報を表示したい倍に、この（１）アプリユーザーのIDをご利用ください。  
+あなたのサービスのDBからデータを取得して、アプリユーザーの情報を表示したい場合に、この（１）アプリユーザーのIDを使用ください。  
 
 ### アプリユーザーのオンライン、オフライン状態をリアルタイムに受け取る
-（２）は以下のように利用します。  
+（２）は以下のように使用します。  
 ```
 //（２）アプリユーザーの状態を取得（オンライン・オフライン状態などのアプリにおける状態）
 var appUsersSystemStatus = userInfo['systemUserStatus'];
@@ -236,7 +281,7 @@ __（２） - 2 取得できる状態の値__
 
 
 ### アプリユーザーのチャットルームでの状態をリアルタイムに受け取る
-（３）は以下のように利用します。  
+（３）は以下のように使用します。  
 
 ```
 //（３）アプリユーザーの状態を取得（チャット中、書込み中、退出中などのチャットルームにおける状態）
@@ -282,7 +327,7 @@ __（３） - 3 取得できる状態の詳細__
 | 退出中             |なし|
 
 ### アプリユーザーからの新着メッセージの情報をリアルタイムに受け取る
-（４）は以下のように利用します。  
+（４）は以下のように使用します。  
 
 ```
 //（４）アプリユーザーの、全Webユーザーとの関係を取得
@@ -316,8 +361,6 @@ appUsersAssociationWithWebUsers.addListenerLatestMessageChanged(function (messag
 	}
 });
 ```
-<strong style="color:red;">TODO （４）-7 がtrueの場合は（４）-5が受け取れないようにする必要ある  
-</strong>
 `function (callbackIsRead, newMessage) {処理}`の部分をご覧ください。  
 この`{処理}`の部分は、新着メッセージがあるたびに発生します。  
 なお、`{処理}`内で取得できるのは`Message`オブジェクトで、  
@@ -332,7 +375,7 @@ __新着を判別する値__
 | 未読            |false       |
 
 ### アプリユーザーからの新着メッセージの情報を受け取る
-（５）は以下のように利用します。  
+（５）は以下のように使用します。  
 ```
 //（５）アプリユーザーと、自分との間でやりとりした最後のメッセージ情報を取得
 var appUserOrMyLastMessage = userInfo['latestMessage'];
@@ -347,13 +390,12 @@ appUserOrMyLastMessage.isRead(myUserId,function (callbackIsRead, newMessage) {
 取得できる値は前項__「アプリユーザーからの新着メッセージの情報をリアルタイムに受け取る」__と同様です。  
 
 ### アプリユーザーからのメッセージの付加情報を受け取る
-このメソッドは、アプリユーザーからのメッセージに付加情報を付けた場合のみ利用できます。  
-付加情報の設定の仕方について、詳しくは<strong style="color:red;">TODO アプリのSDK導入ガイドのここ</strong>
-をご参照ください。  
+このメソッドは、アプリユーザーからのメッセージに付加情報を付けた場合のみ使用できます。  
+付加情報の設定の仕方について、詳しくは[iOS_SDK導入ガイド](./iOS_SDK導入ガイド.md)を参照ください。  
 なお、取得できる付加情報は、最新のメッセージの付加情報のみです。  
 最新のメッセージに付加情報が無い場合は、最後に送信された付加情報を取得できます。  
 
-以下のように利用します。  
+以下のように使用します。  
 ```
 bmesse.getAdditionalInfo(appUserId, function(addtionalIntfo){
 	//-1 メッセージのタイムスタンプを取得
@@ -371,7 +413,7 @@ bmesse.getAdditionalInfo(appUserId, function(addtionalIntfo){
 });
 ```
 ## チャットルームの外観を変更する
-`bmesse.css`を編集してください。  
+`bmesse-バージョン番号.css`を編集してください。  
 詳細はファイルのコメントを直接ご覧ください。  
 
 ## 変更履歴
