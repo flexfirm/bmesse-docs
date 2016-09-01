@@ -61,7 +61,9 @@ BメッセSDKのファイル構成は以下の通りです
 	|	└─bmesse-バージョン番号.css		// Bメッセのスタイルシートです。
 	└─ js
 		├─bmesse-バージョン番号.js			// Bメッセ SDK本体です。
-		└─bmesse-config.js				// Bメッセの設定ファイルです。
+		├─bmesse-config.js				// Bメッセの設定ファイルです。
+		├─manifest.json					// Webブラウザ向けPush通知用 nanifest ファイルです。
+		└─webpush.js					// Webブラウザ向けPush通知用 ServiceWorker です。
 </pre>
 
 <h2 id="Firebaseの設定">Firebaseの設定</h2>  
@@ -75,14 +77,83 @@ BメッセSDKのファイル構成は以下の通りです
 `CREATE PROJECT`ボタンを押したら作成完了です。  
 ここで作成したPROJECTは、Webアプリケーションで利用するFirebaseのデータベースやPushの管理に利用します。  
 
+### セキュリティルールの設定
+
+- Firebaseコンソールの左側のメニューより「Database」を選択します。
+- ヘッダメニューより「RULES」タブを選択します。
+- セキュリティルール定義が記述されているテキストを下記テキストに置き換えます。
+- 「PUBLISH」ボタンのをおし適用します。
+
+セキュリティルール定義）
+```
+{
+  "rules": {
+    "userassociations": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "threads": {
+      "$thread_id": {
+        ".read": "data.child('allow_users/' + auth.uid).exists()",
+      	".write": "auth != null"
+      }
+    },
+    "read": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "userinfos": {
+      "$user_id": {
+          ".read": "auth != null",
+          ".write": "auth != null"
+      }
+    },
+    "userstatus": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "sharebox": {
+      "messages": {
+        "$thread_id": {
+          ".read": "root.child('threads/' + $thread_id + '/allow_users/' + auth.uid).exists()",
+          ".write": "root.child('threads/' + $thread_id + '/allow_users/' + auth.uid).exists()"
+        }
+      },
+      "additionalinfos": {
+        "$thread_id": {
+          ".read": "root.child('threads/' + $thread_id + '/allow_users/' + auth.uid).exists()",
+          ".write": "root.child('threads/' + $thread_id + '/allow_users/' + auth.uid).exists()"
+        }
+      }
+    }
+  }
+}
+```
+
 ### bmesse-config.jsの編集
-__Bmesse.FB__  
+__Bmesse.FB_URL__  
 Firebaseで作成したプロジェクトのメニューにある`Database`をクリックしてください。  
 このページに記載されているURLで`Bmesse.FB`を編集してください。  
 
 __Bmesse.NOTIFICATION_POST_URL__  
 Push通知を使用する際にはこの項目も編集してください。  
 [RubyOnRails_サーバライブラリ導入ガイド](./RubyOnRails_サーバライブラリ導入ガイド.md)の__Push通知の送信__で実装したURLで編集してください。  
+
+__Bmesse.WEB_NOTIFICATION_ENABLE__  
+Webブラウザ向けPush通知を有効にするためのスイッチです。有効にする場合 true にします。  
+
+__Bmesse.WEB_NOTIFICATION_TITLE__  
+Webブラウザ向けPush通知のバナータイトル文字列です。  
+
+__Bmesse.WEB_NOTIFICATION_MESSAGE__  
+Webブラウザ向けPush通知のバナー本体文字列です。  
+
+__Bmesse.WEB_NOTIFICATION_TRANSITION_URL__  
+Webブラウザ向けPush通知のクリックした際の遷移先URLパスを設定します。  
+
+__Bmesse.WEB_NOTIFICATION_ICON_URL__  
+Webブラウザ向けPush通知のアイコン画像URLを設定します。  
+
 
 <h2 id="インストール">インストール</h2>
 以下のファイルをWebクライアントに設置してください。  
@@ -96,6 +167,21 @@ Bメッセを使用するページのhtmlファイルに以下のタグを入れ
 <script type="text/javascript" src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
 ```
 ※[firebaseのバージョンは2.4.2](https://cdn.firebase.com/js/client/2.4.2/firebase.js)を利用ください  
+
+### Webブラウザ向けPush通知の設定### 
+Webブラウザ向けのPush通知についての設定を行います。を利用しない場合は行う必要はありません。  
+
+* Firebaseコンソールの設定アイコンをクリックし、「プロジェクトの設定」を選択します。
+* ヘッダメニューより「クラウドメッセージング」を選択します。
+* 「プロジェクト キー」セクションの「送信者ID」をコピーします。
+* manifest.js 内の項目 "gcm_sender_id" の値にペーストします。
+* Bメッセを使用する html ファイルの head 内に以下のタグを追加します。  
+
+```
+<link rel="manifest" href="manifest.json">
+```
+
+※ 現在 Push通知に対応している Webブラウザは Chrome(Win) のみです。
 
 <h2 id="使用方法">使用方法</h2>
 使用方法については、SDKに付随しているRailsの`sample`アプリケーションを例に説明をします。  

@@ -57,36 +57,42 @@
 - /notification/title  
   プッシュ通知のタイトル
 
-- /notification/fcm-post-url  
-  プッシュ通知を行う際の送信先。通常変更する必要はありません。
+- /notification/fcm-post-url
+  FirebaseCloudMessaging における送信先URL。通常変更の必要はありません。
+
+- /notification/gcm-post-url
+  GoogleCloudMessaging における送信先URL。通常変更の必要はありません。
 
 - /notification/server-key  
   プッシュ通知を行う際の Firebase サーバーキー。Firebaseのコンソール上の下記の場所から取得してください。  
-  Setting アイコン > Project Setting > CLOUD MESSAGING > Project keys > Server key
+  設定アイコン > プロジェクトの設定 > クラウドメッセージング > プロジェクト キー > サーバーキー
 
 - /firebase/secret  
   Firabaseのデータベースへ接続するための秘密鍵。Firebaseのコンソール上の下記の場所から取得してください。  
-  Setting アイコン > Project Setting > DATABASE > Secrets > Database secrets  
-  ※ マスクされている文字列にマウスカーソルを当てると "SHOW" ボタンが表示されます。
+  設定アイコン > プロジェクトの設定 > データベース > データベースのシークレット  
+  ※ マスクされている文字列にマウスカーソルを当てると "表示する" ボタンが表示されます。
 
 - /firebase/auth-token/expires  
-  Firebaeのカスタム認証により発行された認証トークンの有効期間（秒）。最大24時間である 86400  
-  期間が過ぎた場合は再認証が必要なため、アプリの認証ライフサイクルに合わせて設定してください。
+  Firebaeのカスタム認証により発行された認証トークンの有効期間（秒）。
+
+- /firebase/base-url
+  リアルタイムデータベースへアクセスする際のベースURL。Firebaseのコンソール上の下記の場所から取得してください。
+  Database > "データ" タブ > クリップアイコンの右側に表示されているURL
 
 ### Gemfile への追加
 
-Rails プロジェクトの場合はプロジェクトの Gemfile へ下記の記述を追加してください。
+Rails プロジェクトの場合はプロジェクトの Gemfile へ下記の記述を追加してください。バージョンは該当するバージョンを指定します。
 
 ```
-gem 'bmesse'
+gem 'bmesse', '~> 1.0.0'
 ```
 
 <h2 id="使用方法">使用方法</h2>
 
 ### 認証トークンの発行
 
-サーバアプリケーションの認証処理の一環として組込みます。ログインしたユーザのIDを指定して #generate_auth_token() を呼出し、認証トークンを発行します。  
-戻り値の token をWebクライアントまたはネイティブアプリへ返却し、以降の Bメッセ の処理で使用します。
+既存のアプリケーション認証処理の一環として組込みます。ログインしたユーザのIDを指定して #generate_auth_token() を呼出し認証トークンを発行します。  
+戻り値の token をクライアントへ返却し、以降の Bmesse の処理で使用します。
 
 #### サンプルコード
 
@@ -114,10 +120,11 @@ end
 
 ### Push通知の送信
 
-Webクライアントに組み込まれた、Web SDKから呼出されます。  
-メッセージの送信時に、アプリユーザへPush通知を行います。    
+Bメッセの Web SDK から呼出されます。  
+メッセージの送信時に、送信先ユーザへPush通知を行います。送信対象は iOSクライアントおよび Webクライアントです。  
 リクエストパラメタのオブジェクト params をそのまま #push_notification() の引数に指定してください。  
-内部では Firebase Cloud Messaging サービスを利用して通知が行われます。戻り値は、その後の処理では特に必要ありません。
+内部では Firebase Cloud Messaging(FCM) または Google Cloud Messaging(GCM) サービスを利用して通知が行われ、戻り値には送信されたメッセージのIDが返りまが、その後の処理では特に必要ありません。
+なお、メッセージIDは FCM および GCM の各メッセージIDが返る場合がありますので配列として処理してください。
 
 #### サンプルコード
 
@@ -131,9 +138,10 @@ module Api
 
     def index
       begin
-        fcm_message_id = Bmesse::push_notification(params)
-        render json: {'fcm_message_id' => fcm_message_id}
+        message_ids = Bmesse::push_notification(params)
+        render json: {'message_ids' => message_ids.to_json}
       rescue => e
+        STDERR.puts e.backtrace.join("\n")
         render e
       else
       end
@@ -141,3 +149,14 @@ module Api
   end
 end
 ```
+
+## 変更履歴
+
+* v1.1.0  
+	* Webブラウザ向けPush通知への対応を追加
+
+* v1.0.0  
+	初回リリース  
+
+---
+© [KSK Co., Ltd.](http://www.flexfirm.jp) All rights reserved.
