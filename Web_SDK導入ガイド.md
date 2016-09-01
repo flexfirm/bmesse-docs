@@ -241,7 +241,10 @@ bmesse.onLine();
 ```
 bmesse.offLine();
 ```
-なおオフライン時には、自動返信やメールによる通知の機能が働きます。  
+表示中のページが更新される時にオフラインにする制御はSDK内では行っていません。
+必要に応じて呼び出してください。
+
+また、オフライン時には、自動返信やメールによる通知の機能が働きます。 
 __・自動返信__  
 オフライン時にアプリユーザーがチャットをしてきた場合、アプリユーザーに以下の自動返信が行われます。  
 _「～システムより自動返信～  
@@ -268,10 +271,16 @@ bmesse.setAcceptableLimit(limit);
 ```
 __`limit`__： 同時チャットできる数を渡します。  
 人数の上限に達しているオペレーターに関して、アプリユーザー側で「相談中」という状態を受け取れるようになります。  
+なお、`bmesse.getAcceptableLimit();`によって設定した値を取得することができます。
 
 ### チャットルームの表示
+チャットルームは現在２種類あります。
+複数人から相談を受ける方用（主に専門家ユーザー用）と、一般ユーザー用です。
+専門家ユーザー用のチャットルームは、切断ボタンや、現在話しているユーザー数、同時対応可能なユーザーの数などが表示されます。
+
+専門家ユーザー用チャットルームの表示
 ```
-bmesse.showMessageThread(selector,appUserId,appUserName);
+bmesse.showExpertUsersMessageThread(selector,appUserId,appUserName);
 ```
 __`selector`__:　チャットルームをはめ込む箇所の、htmlタグid属性を指定します。  
 　例えば　、チャットルームをはめ込みたい場所が`<div id="messages_container"></div>`だった場合、  
@@ -282,6 +291,15 @@ __`appUserName`__： アプリ側のユーザー名を渡します。これは�
 
 指定したセレクタ部分に以下のようなチャットルーム表示されます。  
 ![img](https://github.com/flexfirm/bmesse-docs/blob/img_branch/img/chat_ui.PNG?raw=true)  
+
+一般ユーザー用チャットルームの表示
+```
+bmesse.showCustomerUsersMessageThread(selector,appUserId,appUserName);
+```
+引数の説明は専門家ユーザー用と同等のため省略
+指定したセレクタ部分に以下のようなチャットルーム表示されます。  
+![img](https://github.com/flexfirm/bmesse-docs/blob/img_branch/img/chat_ui_web.PNG?raw=true)  
+
 
 ## アプリユーザーの状態を受け取る
 例えばWebクライアントで、以下のようにアプリユーザー一覧の表示する場合、アプリユーザーの__「状態」__やメッセージの__「新着」__などの情報を、Webクライアント内に表示する必要があります（赤枠）  
