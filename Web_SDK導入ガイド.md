@@ -417,10 +417,14 @@ bmesse.getAdditionalInfo(appUserId, function(addtionalIntfo){
 詳細はファイルのコメントを直接ご覧ください。  
 
 ## 変更履歴
-v1.0.0  
-　初回リリース のため変更履歴なし  
 
+* v1.2.0  
+	以下の機能を追加
+	* カスタマ向けWebチャット
+	* Webブラウザ向けPush通知
 
+* v1.0.0  
+	初回リリース のため変更履歴なし  
 
 ---
 © [KSK Co., Ltd.](http://www.flexfirm.jp) All rights reserved.
