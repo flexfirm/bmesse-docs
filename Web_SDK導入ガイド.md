@@ -5,13 +5,13 @@
 [iOS_SDK導入ガイドはこちら](./iOS_SDK導入ガイド.md)  
 
 ## 目次
-[Bメッセとは](#Bメッセとは) 
-[用語](#用語) 
-[動作環境](#動作環境)  
-[ファイル構成](#ファイル構成)  
-[Firebaseの設定](#Firebaseの設定)  
-[インストール](#インストール)  
-[使用方法](#使用方法)  
+- [Bメッセとは](#Bメッセとは)  
+- [用語](#用語)  
+- [動作環境](#動作環境)  
+- [ファイル構成](#ファイル構成)  
+- [Firebaseの設定](#Firebaseの設定)  
+- [インストール](#インストール)  
+- [使用方法](#使用方法)  
 
 <h2 id="Bメッセとは">Bメッセとは</h2>
 ![アプリ側](https://github.com/flexfirm/bmesse-docs/blob/img_branch/img/for_app.png?raw=true)　　　　![Webサービス側](https://github.com/flexfirm/bmesse-docs/blob/img_branch/img/for_web.png?raw=true)　　
@@ -24,9 +24,9 @@
 ![Webサービス側](https://github.com/flexfirm/bmesse-docs/blob/img_branch/img/for_web.png?raw=true)　　
 
 __Chrome（for Windows）__  
+__Chrome（for Mac）__ 
 
 ※次期対応  
-・Chrome(for Mac)  
 ・Safari(for Mac)  
 
 <h2 id="用語">用語</h2>
@@ -59,12 +59,12 @@ BメッセSDKのファイル構成は以下の通りです
 /web-sdk
 	├─ api-doc		// APIリファレンスです。
 	├─ css
-	|	└─bmesse-バージョン番号.css		// Bメッセのスタイルシートです。
+	|	└─bmesse.css		// Bメッセのスタイルシートです。
 	└─ js
-		├─bmesse-バージョン番号.js			// Bメッセ SDK本体です。
-		├─bmesse-config.js				// Bメッセの設定ファイルです。
-		├─manifest.json					// Webブラウザ向けPush通知用 manifest ファイルです。
-		└─webpush.js					// Webブラウザ向けPush通知用 ServiceWorker です。
+		├─bmesse.js			// Bメッセ SDK本体です。
+		├─bmesse-config.js		// Bメッセの設定ファイルです。
+		├─manifest.json			// Webブラウザ向けPush通知用 manifest ファイルです。
+		└─bmesse-webpush.js		// Webブラウザ向けPush通知用 ServiceWorker です。
 </pre>
 
 <h2 id="Firebaseの設定">Firebaseの設定</h2>  
@@ -132,6 +132,11 @@ BメッセSDKのファイル構成は以下の通りです
 ```
 
 ### bmesse-config.jsの編集
+
+__Bmesse.JS_ROOT_PATH__  
+BメッセのJavaScriptを配置するURL上のパスを指定します。  
+Bメッセが提供する全てのJavaScriptファイルは同一フォルダに配置する必要があります。
+
 __Bmesse.FB_URL__  
 Firebaseで作成したプロジェクトのメニューにある`Database`をクリックしてください。  
 このページに記載されているURLで`Bmesse.FB`を編集してください。  
@@ -158,18 +163,18 @@ Webブラウザ向けPush通知のアイコン画像URLを設定します。
 
 <h2 id="インストール">インストール</h2>
 以下のファイルをWebクライアントに設置してください。  
-`bmesse-バージョン番号.css`、`bmesse-バージョン番号.js`、`bmesse-config.js`、`manifest.json`、`webpush.js`  
+`bmesse.css`、`bmesse.js`、`bmesse-config.js`、`manifest.json`、`bmesse-webpush.js`  
 
 Bメッセを使用するページのhtmlファイルに以下のタグを入れてください  
 ```
-<link rel="stylesheet" type="text/css" href="{bmesse-バージョン番号.cssへのパス}">
-<script type="text/javascript" src="{bmesse-バージョン番号.jsへのパス}"></script>
+<link rel="stylesheet" type="text/css" href="{bmesse.cssへのパス}">
+<script type="text/javascript" src="{bmesse.jsへのパス}"></script>
 <script type="text/javascript" src="{bmesse-config.jsへのパス}"></script>
 <script type="text/javascript" src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
 ```
-※[firebaseのバージョンは2.4.2](https://cdn.firebase.com/js/client/2.4.2/firebase.js)を利用ください  
+※[Firebaseのバージョンは2.4.2](https://cdn.firebase.com/js/client/2.4.2/firebase.js)を利用ください  
 
-### Webブラウザ向けPush通知の設定### 
+### Webブラウザ向けPush通知の設定 
 Webブラウザ向けのPush通知についての設定を行います。を利用しない場合は行う必要はありません。  
 
 * Firebaseコンソールの設定アイコンをクリックし、「プロジェクトの設定」を選択します。
@@ -182,7 +187,7 @@ Webブラウザ向けのPush通知についての設定を行います。を利�
 <link rel="manifest" href="manifest.json">
 ```
 
-※ 現在 Push通知に対応している Webブラウザは Chrome(Win) のみです。
+※ 現在 Push通知に対応している Webブラウザは Chrome(Win) および Chrome(Mac) です。
 
 <h2 id="使用方法">使用方法</h2>
 使用方法については、SDKに付随しているRailsの`sample`アプリケーションを例に説明をします。  
@@ -518,10 +523,17 @@ bmesse.getAdditionalInfo(appUserId, function(addtionalIntfo){
 });
 ```
 ## チャットルームの外観を変更する
-`bmesse-バージョン番号.css`を編集してください。  
+`bmesse.css` を編集してください。  
 詳細はファイルのコメントを直接ご覧ください。  
 
 ## 変更履歴
+
+* v1.2.1 (2016/11/01)
+	以下を変更  
+	* bmesse-config.js に設定項目 "Bmesse.JS_ROOT_PATH" を追加
+	* webpush.js のファイル名を bmesse-webpush.js へ変更
+	* bmesse-{バージョン番号}.js のファイル名を bmesse.js へ変更
+	* bmesse-{バージョン番号}.css のファイル名を bmesse.css へ変更
 
 * v1.2.0  
 	以下の機能を追加
@@ -529,7 +541,7 @@ bmesse.getAdditionalInfo(appUserId, function(addtionalIntfo){
 	* Webブラウザ向けPush通知
 
 * v1.0.0  
-	初回リリース のため変更履歴なし  
+	初回リリース  
 
 ---
-© [KSK Co., Ltd.](http://www.flexfirm.jp) All rights reserved.
+? [KSK Co., Ltd.](http://www.flexfirm.jp) All rights reserved.
