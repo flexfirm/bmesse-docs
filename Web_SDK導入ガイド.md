@@ -528,6 +528,12 @@ bmesse.getAdditionalInfo(appUserId, function(addtionalIntfo){
 
 ## 変更履歴
 
+* v1.2.2 (2016/11/14)
+	以下を更新
+	* チャット送信のショートカットをMacにおいても "ctr + ent" に統一
+	* チャット画面において特定の条件において書込み中の吹き出しが表示されない不具合を修正
+	* チャット画面において送信後にフォーカスがテキストフィールドに当たるように修正
+
 * v1.2.1 (2016/11/01)
 	以下を変更  
 	* bmesse-config.js に設定項目 "Bmesse.JS_ROOT_PATH" を追加
@@ -544,4 +550,4 @@ bmesse.getAdditionalInfo(appUserId, function(addtionalIntfo){
 	初回リリース  
 
 ---
-? [KSK Co., Ltd.](http://www.flexfirm.jp) All rights reserved.
+© [KSK Co., Ltd.](http://www.flexfirm.jp) All rights reserved.
