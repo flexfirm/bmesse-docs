@@ -187,7 +187,8 @@ Webブラウザ向けのPush通知についての設定を行います。を利�
 <link rel="manifest" href="manifest.json">
 ```
 
-※ 現在 Push通知に対応している Webブラウザは Chrome(Win) および Chrome(Mac) です。
+※ 現在 Push通知に対応している Webブラウザは Chrome(Win) および Chrome(Mac) です。  
+※ ブラウザ向け Push通知は GCM の仕様上、https または local ホスト接続時のみ動作します。
 
 <h2 id="使用方法">使用方法</h2>
 使用方法については、SDKに付随しているRailsの`sample`アプリケーションを例に説明をします。  
