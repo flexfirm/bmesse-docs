@@ -1,4 +1,4 @@
-# Bメッセ V1.2 - Web SDK導入ガイド
+# Bメッセ - Web SDK導入ガイド
 本ガイドは、WebクライアントのオペレーターがBメッセを使えるようにするための導入ガイドです。  
 別途、サーバアプリケーションおよびネイティブアプリへの導入も必要です。  
 [RubyOnRails_サーバライブラリ導入ガイドはこちら](./RubyOnRails_サーバライブラリ導入ガイド.md)  
@@ -23,6 +23,7 @@
 <h2 id="動作環境">動作環境</h2>
 ![Webサービス側](https://github.com/flexfirm/bmesse-docs/blob/img_branch/img/for_web.png?raw=true)　　
 
+__Firebase SDK 3.3 以上__  
 __Chrome（for Windows）__  
 __Chrome（for Mac）__ 
 
@@ -60,10 +61,10 @@ BメッセSDKのファイル構成は以下の通りです
 	├─ api-doc		// APIリファレンスです。
 	├─ css
 	|	└─bmesse.css		// Bメッセのスタイルシートです。
+	├─ manifest.json		// Webブラウザ向けPush通知用 manifest ファイルです。
 	└─ js
 		├─bmesse.js			// Bメッセ SDK本体です。
 		├─bmesse-config.js		// Bメッセの設定ファイルです。
-		├─manifest.json			// Webブラウザ向けPush通知用 manifest ファイルです。
 		└─bmesse-webpush.js		// Webブラウザ向けPush通知用 ServiceWorker です。
 </pre>
 
@@ -96,8 +97,9 @@ BメッセSDKのファイル構成は以下の通りです
     "threads": {
       "$thread_id": {
         ".read": "data.child('allow_users/' + auth.uid).exists()",
-      	".write": "auth != null"
-      }
+        ".write": "auth != null"
+      },
+      ".indexOn": ["latest_msg_at"]
     },
     "read": {
       ".read": "auth != null",
@@ -123,7 +125,8 @@ BメッセSDKのファイル構成は以下の通りです
       "additionalinfos": {
         "$thread_id": {
           ".read": "root.child('threads/' + $thread_id + '/allow_users/' + auth.uid).exists()",
-          ".write": "root.child('threads/' + $thread_id + '/allow_users/' + auth.uid).exists()"
+          ".write": "root.child('threads/' + $thread_id + '/allow_users/' + auth.uid).exists()",
+          ".indexOn": ["from_user_id"]
         }
       }
     }
@@ -136,6 +139,14 @@ BメッセSDKのファイル構成は以下の通りです
 __Bmesse.JS_ROOT_PATH__  
 BメッセのJavaScriptを配置するURL上のパスを指定します。  
 Bメッセが提供する全てのJavaScriptファイルは同一フォルダに配置する必要があります。
+
+__Bmesse.API_KEY__  
+Firebaseコンソール > プロジェクト設定 > アプリを追加 > ウェブアプリにFirebaseを追加  
+で表示される apiKey の値。
+
+__Bmesse.AUTH_DOMAIN__  
+Firebaseコンソール > プロジェクト設定 > アプリを追加 > ウェブアプリにFirebaseを追加
+で表示される authDomain の値。
 
 __Bmesse.FB_URL__  
 Firebaseで作成したプロジェクトのメニューにある`Database`をクリックしてください。  
@@ -170,9 +181,10 @@ Bメッセを使用するページのhtmlファイルに以下のタグを入れ
 <link rel="stylesheet" type="text/css" href="{bmesse.cssへのパス}">
 <script type="text/javascript" src="{bmesse.jsへのパス}"></script>
 <script type="text/javascript" src="{bmesse-config.jsへのパス}"></script>
-<script type="text/javascript" src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/firebasejs/3.3.0/firebase.js"></script>
 ```
-※[Firebaseのバージョンは2.4.2](https://cdn.firebase.com/js/client/2.4.2/firebase.js)を利用ください  
+※Firebaseのバージョン2系は使用できなくなりました。
+
 
 ### Webブラウザ向けPush通知の設定 
 Webブラウザ向けのPush通知についての設定を行います。を利用しない場合は行う必要はありません。  
@@ -181,6 +193,7 @@ Webブラウザ向けのPush通知についての設定を行います。を利�
 * ヘッダメニューより「クラウドメッセージング」を選択します。
 * 「プロジェクト キー」セクションの「送信者ID」をコピーします。
 * manifest.js 内の項目 "gcm_sender_id" の値にペーストします。
+* manifest.js 内の項目 "name" には任意の値を設定します。
 * Bメッセを使用する html ファイルの head 内に以下のタグを追加します。  
 
 ```
@@ -243,10 +256,22 @@ __`myUserId`__： Webアプリケーションにログインしたユーザー�
 ```
 bmesse.onLine();
 ```
+オフライン後に何か処理を行いたい場合には、引数にコールバック関数を渡します。  
+```
+bmesse.onLine(function(){
+	//行いたい処理
+});
+```
 #### オペレーターをオフラインにする
 オペレーターがチャットを受け付けないようにするために、このメソッドを呼びます。  
 ```
 bmesse.offLine();
+```
+オフライン後に何か処理を行いたい場合には、引数にコールバック関数を渡します。  
+```
+bmesse.offLine(function(){
+	//行いたい処理
+});
 ```
 表示中のページが更新される時にオフラインにする制御はSDK内では行っていません。
 必要に応じて呼び出してください。
@@ -529,6 +554,10 @@ bmesse.getAdditionalInfo(appUserId, function(addtionalIntfo){
 
 ## 変更履歴
 
+* v1.6.0 (2017/01/25)
+	以下を更新
+	* Firebase3系に対応
+
 * v1.2.2 (2016/11/14)
 	以下を更新
 	* チャット送信のショートカットをMacにおいても "ctr + ent" に統一
@@ -551,4 +580,4 @@ bmesse.getAdditionalInfo(appUserId, function(addtionalIntfo){
 	初回リリース  
 
 ---
-© [KSK Co., Ltd.](http://www.flexfirm.jp) All rights reserved.
+? [KSK Co., Ltd.](http://www.flexfirm.jp) All rights reserved.
